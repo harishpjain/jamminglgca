@@ -391,7 +391,7 @@ class LGCA_base():
         self.apply_boundaries()
         self.update_dynamic_fields()
 
-    def timeevo(self, timesteps=100, record=False, recordN=False, recorddens=True, showprogress=True):
+    def timeevo(self, timesteps=100, record=False, recordN=False, recorddens=True, recordecm=False, showprogress=True):
         self.update_dynamic_fields()
         if record:
             self.nodes_t = np.zeros((timesteps + 1,) + self.dims + (self.K,), dtype=self.nodes.dtype)
@@ -402,6 +402,9 @@ class LGCA_base():
         if recorddens:
             self.dens_t = np.zeros((timesteps + 1,) + self.dims)
             self.dens_t[0, ...] = self.cell_density[self.nonborder]
+        if recordecm:
+            self.ecm_t = np.zeros((timesteps + 1,) + self.dims)
+            self.ecm_t[0, ...]= self.ecm[self.nonborder]
         for t in range(1, timesteps + 1):
             self.timestep()
             if record:
@@ -410,6 +413,8 @@ class LGCA_base():
                 self.n_t[t] = self.cell_density[self.nonborder].sum()
             if recorddens:
                 self.dens_t[t, ...] = self.cell_density[self.nonborder]
+            if recordecm:
+                self.ecm_t[t, ...] = self.ecm[self.nonborder]
             if showprogress:
                 update_progress(1.0 * t / timesteps)
 
