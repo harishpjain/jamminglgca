@@ -4,6 +4,8 @@ import matplotlib.ticker as mticker
 from matplotlib.collections import PatchCollection
 from matplotlib.patches import RegularPolygon, Circle, FancyArrowPatch
 from matplotlib.colors import Normalize
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+
 
 try:
     from base import *
@@ -194,7 +196,7 @@ class LGCA_Square(LGCA_base):
         corr = np.divide(corr, nb_flux_norm, where=nb_flux_norm > 1e-6, out=np.zeros_like(corr))
         return corr
 
-    def setup_figure(self, figindex=None, figsize=None, tight_layout=True):
+    def setup_figure(self, figindex=None, figsize=(8, 8), tight_layout=True):
         dy = self.r_poly * np.cos(self.orientation)
         if figindex is None:
             fig = plt.gcf()
@@ -202,7 +204,10 @@ class LGCA_Square(LGCA_base):
             fig.set_tight_layout(tight_layout)
 
         else:
-            fig = plt.figure(num=figindex, figsize=figsize, tight_layout=tight_layout)
+            fig = plt.figure(num=figindex)
+            fig.set_size_inches(figsize)
+            fig.set_tight_layout(tight_layout)
+
         ax = plt.gca()
         xmax = self.xcoords.max() + 0.5
         xmin = self.xcoords.min() - 0.5
@@ -478,8 +483,12 @@ class LGCA_Square(LGCA_base):
         pc = PatchCollection(polygons, match_original=True)
         ax.add_collection(pc)
         if cbar:
-            cbar = fig.colorbar(cmap, use_gridspec=True)
+            divider = make_axes_locatable(ax)
+            cax = divider.append_axes("right", size="5%", pad=0.1)
+            cbar = fig.colorbar(cmap, cax=cax, use_gridspec=True)
             cbar.set_label(cbarlabel)
+            plt.sca(ax)
+
         return fig, pc, cmap
 
     def plot_density(self, density=None, figindex=None, figsize=None, tight_layout=True, cmap='viridis', vmax=None,
