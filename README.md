@@ -1,3 +1,4 @@
-# BIO-LGCA - A Mesosocopic Modelling Framework for Collective Phenomena
+# Cell-cell adhesion and 3D matrix confinement determine jamming transitions in breast cancer invasion
+## Supplement repository
 
-We want to design a python library as a piece of public software, that can be used in ongoing research as well as to exemplify the unique advantages of BIO-LGCAs.
+This repository provides the simulation code and the mathematical definition of the in silico model used in the article. A video of exemplary model realizations with four different parameter combinations of cell-cell adhesion and ECM density is provided.
